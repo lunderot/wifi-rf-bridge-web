@@ -1,10 +1,8 @@
-
-import data from './data.json';
-
 const dataToDom = (data) => {
+	document.querySelector('#list').innerHTML = '';
 	data.plugs.map((item) => {
 		const stateClass = item.state ? 'is-success' : 'is-danger';
-		const stateText = item.state ? 'On': 'Off';
+		const stateText = item.state ? 'On' : 'Off';
 		document.querySelector('#list').innerHTML += `
 			<div class="box columns is-vcentered">
 				<div class="column is-half">
@@ -19,10 +17,6 @@ const dataToDom = (data) => {
 			</div>
 		`;
 	});
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-	dataToDom(data);
 	document.querySelectorAll('.button').forEach(el => {
 		el.addEventListener('click', event => {
 			if (event.srcElement.classList.contains('is-danger')) {
@@ -37,4 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		});
 	});
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+	fetch('/get')
+	.then(response => response.json())
+	.then(data => dataToDom(data))
+	.catch(error => console.log(error));
 });
